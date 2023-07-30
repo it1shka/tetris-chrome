@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Tetris Game",
+  "version": "0.0.1",
+  "version_name": "Alpha",
+  "description": "Tetris Game implemented as Google Chrome extension",
+  "author": "Tikhon Belousov",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Tetris Game",
+    "default_icon": "icon.png"
+  }
+}

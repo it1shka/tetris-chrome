@@ -1,0 +1,17 @@
+{
+  "name": "tetris-chrome",
+  "description": "Tetris implemented in Google Chrome",
+  "source": "index.html",
+  "browserlist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "build": "rm -rf dist && parcel build --no-source-maps && cp manifest.json dist && cp icon.png dist"
+  },
+  "author": "2tishbel@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "parcel": "^2.9.3"
+  },
+  "devDependencies": {
+    "@parcel/transformer-sass": "^2.9.3"
+  }
+}
