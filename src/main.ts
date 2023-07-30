@@ -96,7 +96,7 @@ export default new class TetrisGame {
   private instantiatePiece = () => {
     const tape = randomElement(tapes)
     const color = randomElement(this.PIECE_COLORS)
-    const position: Position = [-1, ~~(this.BOARD_WIDTH / 2) - this.SPAWN_OFFSET]
+    const position: Position = [-2, ~~(this.BOARD_WIDTH / 2) - this.SPAWN_OFFSET]
     this.piece = new Piece(tape, color, position)
   }
 
@@ -158,6 +158,11 @@ export default new class TetrisGame {
     }
 
     this.instantiatePiece()
+    this.boardCleanup()
+  }
+
+  private boardCleanup = () => {
+
   }
 
   private movePieceRight = () => {
