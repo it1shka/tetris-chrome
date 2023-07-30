@@ -125,7 +125,7 @@ export default new class TetrisGame {
       if (col < 0 || row >= this.BOARD_HEIGHT || col >= this.BOARD_WIDTH) {
         return true
       }
-      if (this.walls[row][col]) {
+      if (row >= 0 && this.walls[row][col]) {
         return true
       }
     }
@@ -141,6 +141,7 @@ export default new class TetrisGame {
     }
 
     this.piece.moveUp()
+
     for (const [row, col] of this.piece.tiles) {
       if (row < 0 || col < 0 || row >= this.BOARD_HEIGHT || col >= this.BOARD_WIDTH) {
         continue
