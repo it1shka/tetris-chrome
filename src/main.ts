@@ -1,4 +1,4 @@
-import { AsyncLoop, Keyboard, array2D, randomElement } from './lib'
+import { AsyncLoop, Keyboard, array2D, randomElement, removeElement } from './lib'
 import Piece, { Position } from './piece'
 import tapes from './sheets'
 
@@ -162,7 +162,20 @@ export default new class TetrisGame {
   }
 
   private boardCleanup = () => {
-
+    const completedRows = this.walls.filter(row => {
+      for (const each of row) {
+        if (!each) return false
+      }
+      return true
+    })
+    this.score += completedRows.length * this.BOARD_WIDTH
+    for (const row of completedRows) {
+      removeElement(this.walls, row)
+    }
+    for (let i = 0; i < completedRows.length; i++) {
+      const emptyRow = new Array(this.BOARD_WIDTH).fill(null)
+      this.walls.unshift(emptyRow)
+    }
   }
 
   private movePieceRight = () => {

@@ -80,3 +80,12 @@ export function array2D<T>(height: number, width: number, value?: T) {
   }
   return matrix
 }
+
+export function removeElement<T>(array: T[], element: T) {
+  const index = array.indexOf(element)
+  if (index === -1) {
+    return false
+  }
+  array.splice(index, 1)
+  return true
+}
