@@ -13,7 +13,7 @@ export const Keyboard = new class {
 
   // so far I need only subscription function
 
-  subscribe(action: () => any, ...keys: string[]) {
+  subscribe = (action: () => any, ...keys: string[]) => {
     for (const key of keys) {
       if (!this.actions[key]) this.actions[key] = []
       this.actions[key].push(action)

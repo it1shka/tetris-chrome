@@ -53,28 +53,28 @@ export default class Piece {
 
   // here I want to allow in-place mutation
 
-  moveRight() {
+  moveRight = () => {
     (this.position as Mutable<Position>)[1]++
   }
 
-  moveLeft() {
+  moveLeft = () => {
     (this.position as Mutable<Position>)[1]--
   }
 
-  moveDown() {
+  moveDown = () => {
     (this.position as Mutable<Position>)[0]++
   }
 
   //
 
-  rotateRight() {
+  rotateRight = () => {
     this.stateIndex = 
       this.stateIndex >= this.stateTape.length - 1
         ? 0
         : this.stateIndex + 1
   }
 
-  rotateLeft() {
+  rotateLeft = () => {
     this.stateIndex = 
       this.stateIndex <= 0
         ? this.stateTape.length - 1

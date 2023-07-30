@@ -36,4 +36,6 @@ export default new class TetrisGame {
     document.body.appendChild(scoreElement)
     return scoreElement
   }
+
+  
 }
