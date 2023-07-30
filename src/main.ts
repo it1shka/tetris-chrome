@@ -134,9 +134,29 @@ export default new class TetrisGame {
 
   private movePieceDown = () => {
     if (!this.piece) return
-    // ... TODO: 
     this.piece.moveDown()
+    if (!this.isPieceColliding()) {
+      this.updateDisplay()
+      return
+    }
+
+    this.piece.moveUp()
+    for (const [row, col] of this.piece.tiles) {
+      if (row < 0 || col < 0 || row >= this.BOARD_HEIGHT || col >= this.BOARD_WIDTH) {
+        continue
+      }
+      this.walls[row][col] = this.piece.color
+    }
+
     this.updateDisplay()
+
+    if (this.isExceedingUpperBound()) {
+      alert('You lost!')
+      this.piece = null
+      return
+    }
+
+    this.instantiatePiece()
   }
 
   private movePieceRight = () => {
@@ -190,6 +210,14 @@ export default new class TetrisGame {
     if (!this.isPieceColliding()) return true
     this.piece.moveDown()
 
+    return false
+  }
+
+  private isExceedingUpperBound = () => {
+    if (!this.piece) return
+    for (const [row, _] of this.piece.tiles) {
+      if (row < 0) return true
+    }
     return false
   }
 
