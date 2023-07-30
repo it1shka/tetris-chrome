@@ -10,45 +10,21 @@ export default class Piece {
   constructor (
     private readonly stateTape: PieceStateTape,
     public readonly color: string,
-    private coordinates: Position
+    private position: Position
   ) {}
 
-  // getting physical size of the piece
-
-  get width() {
-    return this.stateTape[0][0].length
-  }
-
-  get height() {
-    return this.stateTape[0].length
-  }
-
-  //
-
-  get currentState() {
-    return this.stateTape[this.stateIndex]
-  }
-
-  get previousState() {
-    if (this.stateIndex <= 0) {
-      return this.stateTape[this.stateTape.length - 1]
+  // returns global positions of tiles
+  get tiles() {
+    const state = this.stateTape[this.stateIndex]
+    const tilePositions = new Array<Position>()
+    const [globalRow, globalColumn] = this.position
+    for (let row = 0; row < state.length; row++) {
+      for (let col = 0; col < state[row].length; col++) {
+        if (!state[row][col]) continue
+        tilePositions.push([ row + globalRow, col + globalColumn ])
+      }
     }
-    return this.stateTape[this.stateIndex - 1]
-  }
-
-  get nextState() {
-    if (this.stateIndex >= this.stateTape.length - 1) {
-      return this.stateTape[0]
-    }
-    return this.stateTape[this.stateIndex + 1]
-  }
-
-  get position() {
-    return this.coordinates
-  }
-
-  private set position(value: Position) {
-    this.coordinates = value
+    return tilePositions
   }
 
   // here I want to allow in-place mutation
@@ -63,6 +39,10 @@ export default class Piece {
 
   moveDown = () => {
     (this.position as Mutable<Position>)[0]++
+  }
+
+  moveUp = () => {
+    (this.position as Mutable<Position>)[0]--
   }
 
   //

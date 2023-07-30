@@ -1,13 +1,21 @@
 export type Mutable<T> = { -readonly [K in keyof T]: T[K] }
 
 export const Keyboard = new class {
+
   private readonly actions: {[key: string]: Array<() => any>} = {}
+  private readonly pressed = new Set<string>()
+
   constructor() {
     window.addEventListener('keydown', (event) => {
-      const bucket = this.actions[event.key]
+      const key = event.key
+      this.pressed.add(key)
+      const bucket = this.actions[key]
       if (!bucket) return
       event.preventDefault()
       bucket.forEach(action => action())
+    })
+    window.addEventListener('keyup', ({ key }) => {
+      this.pressed.delete(key)
     })
   }
 
@@ -21,6 +29,10 @@ export const Keyboard = new class {
   }
 
   //
+
+  isPressed(...keys: string[]) {
+    return keys.some(key => this.pressed.has(key))
+  }
 }
 
 export class AsyncLoop {
@@ -52,4 +64,9 @@ export class AsyncLoop {
     this.stop()
     this.start()
   }
+}
+
+export function randomElement<T>(array: T[]) {
+  const index = ~~(Math.random() * array.length)
+  return array[index]
 }
