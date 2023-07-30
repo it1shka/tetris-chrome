@@ -13,6 +13,18 @@ export default class Piece {
     private coordinates: Position
   ) {}
 
+  // getting physical size of the piece
+
+  get width() {
+    return this.stateTape[0][0].length
+  }
+
+  get height() {
+    return this.stateTape[0].length
+  }
+
+  //
+
   get currentState() {
     return this.stateTape[this.stateIndex]
   }
