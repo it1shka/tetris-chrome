@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 460px;
+  height: 600px;
+}
+
+body {
+  font-family: sans-serif;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+$board-width: 10;
+$board-height: 20;
+$cell-size: 27px;
+$cell-radius: 3px;
+
+.board-root {
+  display: grid;
+  grid-template-rows: repeat($board-height, 1fr);
+  grid-template-columns: repeat($board-width, 1fr);
+  gap: 1px;
+
+  .board-cell {
+    width: $cell-size;
+    height: $cell-size;
+    border: 1px solid black;
+    border-radius: $cell-radius;
+    background-color: #ededed;
+  }
+}
