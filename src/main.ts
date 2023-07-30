@@ -1,4 +1,4 @@
-import { AsyncLoop, Keyboard, randomElement } from './lib'
+import { AsyncLoop, Keyboard, array2D, randomElement } from './lib'
 import Piece, { Position } from './piece'
 import tapes from './sheets'
 
@@ -12,10 +12,15 @@ export default new class TetrisGame {
     '#1658a8', '#4c16a8', 
     '#a81681' 
   ]
+  private readonly EMPTY_CELL_COLOR = '#ededed'
+  private readonly SPAWN_OFFSET = 2
 
   private readonly updateLoop: AsyncLoop
   private readonly boardElements: HTMLDivElement[][]
   private readonly scoreElement: HTMLHeadingElement
+
+  private piece: Piece | null = null
+  private readonly walls = array2D<string | null>(this.BOARD_HEIGHT, this.BOARD_WIDTH)
 
   private points = 0
   private set score(value: number) {
@@ -26,14 +31,12 @@ export default new class TetrisGame {
     return this.points
   }
 
-  private piece: Piece | null = null
-
   // initialization
 
   constructor() {
     this.boardElements = this.mountBoard()
     this.scoreElement = this.mountScore()
-    this.updateLoop = new AsyncLoop(this.updateGame, 650)
+    this.updateLoop = new AsyncLoop(this.updateGame, 450)
     this.bindKeys()
     this.startGame()
   }
@@ -74,8 +77,10 @@ export default new class TetrisGame {
   // methods
 
   private startGame = () => {
+    this.walls.forEach(row => row.fill(null))
     this.score = 0
     this.instantiatePiece()
+    this.updateDisplay()
     this.updateLoop.restart()
   }
 
@@ -87,13 +92,34 @@ export default new class TetrisGame {
   private instantiatePiece = () => {
     const tape = randomElement(tapes)
     const color = randomElement(this.PIECE_COLORS)
-    const position: Position = [-1, ~~(this.BOARD_WIDTH / 2)]
+    const position: Position = [-1, ~~(this.BOARD_WIDTH / 2) - this.SPAWN_OFFSET]
     this.piece = new Piece(tape, color, position)
+  }
+
+  private updateDisplay = () => {
+    for (let row = 0; row < this.BOARD_HEIGHT; row++) {
+      for (let col = 0; col < this.BOARD_WIDTH; col++) {
+        const maybeColor = this.walls[row][col]
+        const element = this.boardElements[row][col]
+        element.style.backgroundColor = maybeColor ?? this.EMPTY_CELL_COLOR
+      }
+    }
+    if (!this.piece) return
+    for (const [row, col] of this.piece.tiles) {
+      if (row < 0 || col < 0 || row >= this.BOARD_HEIGHT || col >= this.BOARD_WIDTH) {
+        continue
+      }
+      const element = this.boardElements[row][col]
+      const color = this.piece.color
+      element.style.backgroundColor = color
+    }
   }
 
   private movePieceDown = () => {
     if (!this.piece) return
     // ...
+    this.piece.moveDown()
+    this.updateDisplay()
   }
 
   private rotatePieceRight = () => {

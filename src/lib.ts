@@ -70,3 +70,13 @@ export function randomElement<T>(array: T[]) {
   const index = ~~(Math.random() * array.length)
   return array[index]
 }
+
+export function array2D<T>(height: number, width: number, value?: T) {
+  const matrix = new Array<T[]>(height)
+  for (let row = 0; row < height; row++) {
+    const matrixRow = new Array(width)
+    if (value) matrixRow.fill(value)
+    matrix[row] = matrixRow
+  }
+  return matrix
+}
