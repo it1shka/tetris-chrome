@@ -1,14 +1,22 @@
+import { AsyncLoop, Keyboard } from './lib'
+
 export default new class TetrisGame {
 
   private readonly BOARD_WIDTH = 10
   private readonly BOARD_HEIGHT = 20
 
+  private readonly updateLoop: AsyncLoop
   private readonly boardElements: HTMLDivElement[][]
   private readonly scoreElement: HTMLHeadingElement
+
+  // initialization
 
   constructor() {
     this.boardElements = this.mountBoard()
     this.scoreElement = this.mountScore()
+    this.bindKeys()
+    this.updateLoop = new AsyncLoop(this.updateGame, 1000)
+    this.startGame()
   }
 
   private mountBoard = () => {
@@ -37,5 +45,32 @@ export default new class TetrisGame {
     return scoreElement
   }
 
-  
+  private bindKeys = () => {
+    Keyboard.subscribe(this.startGame, 'r', 'R')
+    Keyboard.subscribe(this.movePieceDown, 's', 'S', 'ArrowDown')
+    Keyboard.subscribe(this.rotatePieceRight, 'd', 'D', 'ArrowRight')
+    Keyboard.subscribe(this.rotatePieceLeft, 'a', 'A', 'ArrowLeft')
+  }
+
+  // methods
+
+  private startGame = () => {
+
+  }
+
+  private updateGame = () => {
+
+  }
+
+  private movePieceDown = () => {
+
+  }
+
+  private rotatePieceRight = () => {
+
+  }
+
+  private rotatePieceLeft = () => {
+
+  }
 }

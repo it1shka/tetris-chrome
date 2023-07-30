@@ -22,3 +22,34 @@ export const Keyboard = new class {
 
   //
 }
+
+export class AsyncLoop {
+
+  private interval: number | undefined = undefined
+  private running = false
+
+  constructor (
+    private readonly action: () => any, 
+    private readonly period: number
+  ) {}
+
+  start = () => {
+    if (this.running) return
+    this.interval = setInterval (
+      this.action,
+      this.period
+    )
+    this.running = true
+  }
+
+  stop = () => {
+    if (!this.running) return
+    clearInterval(this.interval)
+    this.running = false
+  }
+
+  restart = () => {
+    this.stop()
+    this.start()
+  }
+}
