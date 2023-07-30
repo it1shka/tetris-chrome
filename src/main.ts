@@ -69,9 +69,13 @@ export default new class TetrisGame {
 
   private bindKeys = () => {
     Keyboard.subscribe(this.startGame, 'r', 'R')
+
     Keyboard.subscribe(this.movePieceDown, 's', 'S', 'ArrowDown')
-    Keyboard.subscribe(this.rotatePieceRight, 'd', 'D', 'ArrowRight')
-    Keyboard.subscribe(this.rotatePieceLeft, 'a', 'A', 'ArrowLeft')
+    Keyboard.subscribe(this.movePieceRight, 'ArrowRight')
+    Keyboard.subscribe(this.movePieceLeft, 'ArrowLeft')
+
+    Keyboard.subscribe(this.rotatePieceRight, 'd', 'D')
+    Keyboard.subscribe(this.rotatePieceLeft, 'a', 'A')
   }
 
   // methods
@@ -115,21 +119,78 @@ export default new class TetrisGame {
     }
   }
 
+  private isPieceColliding = () => {
+    if (!this.piece) return false
+    for (const [row, col] of this.piece.tiles) {
+      if (col < 0 || row >= this.BOARD_HEIGHT || col >= this.BOARD_WIDTH) {
+        return true
+      }
+      if (this.walls[row][col]) {
+        return true
+      }
+    }
+    return false
+  }
+
   private movePieceDown = () => {
     if (!this.piece) return
-    // ...
+    // ... TODO: 
     this.piece.moveDown()
+    this.updateDisplay()
+  }
+
+  private movePieceRight = () => {
+    if (!this.piece) return
+    this.piece.moveRight()
+    if (this.isPieceColliding()) {
+      this.piece.moveLeft()
+    }
+    this.updateDisplay()
+  }
+
+  private movePieceLeft = () => {
+    if (!this.piece) return
+    this.piece.moveLeft()
+    if (this.isPieceColliding()) {
+      this.piece.moveRight()
+    }
     this.updateDisplay()
   }
 
   private rotatePieceRight = () => {
     if (!this.piece) return
-    // ...
+    this.piece.rotateRight()
+    if (this.isPieceColliding() && !this.tryToKick()) {
+      this.piece.rotateLeft()
+    }
+    this.updateDisplay()
   }
 
   private rotatePieceLeft = () => {
     if (!this.piece) return
-    // ...
+    this.piece.rotateLeft()
+    if (this.isPieceColliding() && !this.tryToKick()) {
+      this.piece.rotateRight()
+    }
+    this.updateDisplay()
+  }
+
+  private tryToKick = () => {
+    if (!this.piece) return false
+
+    this.piece.moveRight()
+    if (!this.isPieceColliding()) return true
+    this.piece.moveLeft()
+
+    this.piece.moveLeft()
+    if (!this.isPieceColliding()) return true
+    this.piece.moveRight()
+
+    this.piece.moveUp()
+    if (!this.isPieceColliding()) return true
+    this.piece.moveDown()
+
+    return false
   }
 
 }

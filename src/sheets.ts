@@ -53,8 +53,9 @@ export type PieceStateTape = Array<PieceState>
 function sheetToStateTape(sheet: string) {
   const lines = sheet
     .split('\n')
-    .map(line => line.trim().split('|'))
+    .map(line => line.trim())
     .filter(line => line.length > 0)
+    .map(line => line.split('|'))
   // lines.length       --> state height
   // lines[0].length    --> amount of states
   // lines[0][0].length --> state width
